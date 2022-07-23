@@ -1,0 +1,28 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/auth/github",
+      "handler": "Auth.loginWithGithub",
+      "config": {
+        "prefix": "",
+        "description": "",
+        "tag": {
+          "plugin": "users-permissions"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/auth/access_token",
+      "handler": "Auth.getAccessToken",
+      "config": {
+        "prefix": "",
+        "description": "",
+        "tag": {
+          "plugin": "users-permissions"
+        }
+      }
+    }
+  ]
+}
