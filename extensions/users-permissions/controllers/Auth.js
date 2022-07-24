@@ -65,7 +65,7 @@ module.exports = {
         message: "",
       });
     }
-    const uid = data.id;
+    const uid = data.node_id;
 
     const user = await strapi.query("user", "users-permissions").findOne({
       github_uid: uid,
