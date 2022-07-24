@@ -47,6 +47,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories",
+      "handler": "post.getRepositories",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }
