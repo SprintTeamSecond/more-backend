@@ -9,12 +9,13 @@ const badRequest = (ctx, error) => {
 };
 
 const filteredUser = (user, github) => {
-  console.log(user);
+  // console.log(user);
   return {
     id: user.id,
     avatar: github?.avatar_url,
-    email: github?.html_url,
+    url: github?.html_url,
     name: github?.name ? github.name : github?.login,
+    introduce: github?.bio || "",
   };
 };
 
@@ -57,7 +58,7 @@ module.exports = {
         authorization: `token ${token}`, // 토큰 명시 필수!!!
       },
     });
-    // console.log("userinfo", data);
+    // console.log(data);
 
     if (!data) {
       return badRequest(ctx, {
@@ -71,9 +72,10 @@ module.exports = {
       github_uid: uid,
     });
     if (user) {
-      console.log("data", data);
+      // console.log(filteredUser(user, data));
       return filteredUser(user, data);
     }
+    // console.log(user);
 
     await strapi.query("user", "users-permissions").create({
       username: data?.name ? data.name : data?.login,
@@ -85,6 +87,7 @@ module.exports = {
     const newUser = await strapi.query("user", "users-permissions").findOne({
       github_uid: uid,
     });
+
     return filteredUser(newUser, data);
   },
 };

@@ -16,7 +16,6 @@
       "type": "string"
     },
     "author": {
-      "unique": true,
       "plugin": "users-permissions",
       "model": "user"
     },
@@ -31,6 +30,9 @@
       "model": "post-like"
     },
     "thumbnail_url": {
+      "type": "string"
+    },
+    "github_repository_id": {
       "type": "string"
     }
   }
