@@ -10,15 +10,17 @@ const { sanitizeEntity, parseMultipartData } = require("strapi-utils");
 module.exports = {
   async find(ctx) {
     const filter = ctx.query;
-    const entities = await strapi.query("post").find(filter);
+    console.log(filter);
+    const entities = await strapi.services["post"].find({
+      _start: "0",
+      _limit: "30",
+    });
     return entities;
   },
 
   async create(ctx) {
     const { data, files } = parseMultipartData(ctx);
-
     let entity = await strapi.services["post"].create(data, { files });
-
     return entity;
   },
 

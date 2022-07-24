@@ -8,7 +8,8 @@
     "build:prod": "ENV_PATH=./.env.prod strapi build",
     "build:local": "ENV_PATH=./.env.local strapi build",
     "dev:local": "ENV_PATH=./.env.local strapi develop",
-    "dev:prod": "ENV_PATH=./.env.local strapi develop"
+    "dev:prod": "ENV_PATH=./.env.local strapi develop",
+    "dev": "strapi develop"
   },
   "devDependencies": {},
   "dependencies": {
@@ -19,6 +20,7 @@
     "strapi": "3.6.8",
     "strapi-admin": "3.6.8",
     "strapi-connector-bookshelf": "3.6.8",
+    "strapi-connector-mongoose": "^3.6.10",
     "strapi-plugin-content-manager": "3.6.8",
     "strapi-plugin-content-type-builder": "3.6.8",
     "strapi-plugin-email": "3.6.8",
