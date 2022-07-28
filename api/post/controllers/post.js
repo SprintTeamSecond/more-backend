@@ -10,37 +10,71 @@ const badRequest = (ctx, error) => {
   ctx.response.body = { status: 400, error };
 };
 
-const filteredPost = (post, repo) => {
+const filteredCombinedGithubPost = (post, repo) => {
+  return {
+    id: post?.id,
+    title: post?.title,
+    description: post?.description,
+    hashtag: post?.hashtag,
+    author: repo?.owner?.login,
+    stars: repo?.stargazers_count,
+    used_language: repo?.language,
+    url: repo?.html_url,
+    readme_url: `https://raw.githubusercontent.com/${repo.full_name}/${repo.default_branch}/README.md`,
+    full_name: repo?.full_name,
+  };
+};
+
+const filteredPost = (post) => {
   return {
     id: post.id,
     title: post.title,
     description: post.description,
     hashtag: post.hashtag,
-    author: repo.owner.login,
-    stars: repo.stargazers_count,
-    used_language: repo.language,
+  };
+};
+
+const filteredRepo = (repo) => {
+  return {
+    id: repo.node_id,
+    name: repo.name,
+    full_name: repo.full_name,
     url: repo.html_url,
+    user: repo.owner?.login,
+    description: repo.description,
+    updated_at: repo.updated_at,
   };
 };
 
 const filteredRepos = (repos) => {
-  return repos?.map((r) => {
-    return {
-      id: r.node_id,
-      name: r.name,
-      url: r.html_url,
-      user: r.owner.login,
-      description: r.description,
-    };
+  return repos?.map((r) => filteredRepo(r));
+};
+
+const repoPostCombiner = (posts, repos) => {
+  return posts.map((post) => {
+    const findedRepo = repos.find(
+      (repo) => repo.node_id === post.github_repository_id
+    );
+    if (!findedRepo) {
+      return filteredPost(post);
+    }
+    return filteredCombinedGithubPost(post, findedRepo);
   });
 };
 
 module.exports = {
   async find(ctx) {
+    const { token } = ctx.query;
     const filter = ctx.query;
-    const entities = await strapi.services["post"].find(filter);
-    console.log(entities);
-    return entities;
+    const posts = await strapi.services["post"].find();
+    const repos = await axios.get("https://api.github.com/user/repos", {
+      headers: {
+        authorization: `token ${token}`, // 토큰 명시 필수!!!
+      },
+    });
+    console.log(repos);
+    // console.log("컴바이너", repoPostCombiner(posts, repos.data));
+    return repoPostCombiner(posts, repos.data);
   },
 
   async findOne(ctx) {
@@ -67,13 +101,11 @@ module.exports = {
         message: "",
       });
     }
-    console.log(filteredPost(result, matchedRepo));
-    return filteredPost(result, matchedRepo);
+    return filteredCombinedGithubPost(result, matchedRepo);
   },
 
   async create(ctx) {
     const data = ctx.query;
-    console.log(data);
     if (!data?.github_repository_id) {
       return badRequest(ctx, {
         id: "not_have_required_data",
@@ -110,7 +142,6 @@ module.exports = {
         authorization: `token ${token}`, // 토큰 명시 필수!!!
       },
     });
-    console.log(data);
     return filteredRepos(data);
   },
 };

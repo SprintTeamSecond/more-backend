@@ -8,7 +8,7 @@
     "build": "strapi build",
     "build:prod": "ENV_PATH=./.env.prod strapi build",
     "build:local": "ENV_PATH=./.env.local strapi build",
-    "dev:local": "ENV_PATH=./.env.local strapi develop",
+    "start:local": "ENV_PATH=./.env.local strapi develop",
     "dev:prod": "ENV_PATH=./.env.local strapi develop",
     "dev": "strapi develop"
   },
