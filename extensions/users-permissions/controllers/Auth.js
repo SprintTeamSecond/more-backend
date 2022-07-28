@@ -28,7 +28,7 @@ module.exports = {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_SECRET_KEY,
         code,
-        redirect_uri: "https://mo-re.netlify.app/callback",
+        redirect_uri: process.env.REDIRECT_URL,
       },
       {
         headers: {
