@@ -106,7 +106,8 @@ module.exports = {
 
   async create(ctx) {
     const data = ctx.query;
-    if (!data?.github_repository_id) {
+    console.log(data);
+    if (!(data?.github_repository_id && data?.author)) {
       return badRequest(ctx, {
         id: "not_have_required_data",
         message: "필수 정보가 입력되지 않았습니다.",
@@ -121,9 +122,7 @@ module.exports = {
         message: "중복된 레포지토리가 존재합니다.",
       });
     }
-    let entity = await strapi.services["post"].create({
-      ...data,
-    });
+    let entity = await strapi.services["post"].create(data);
     return entity;
   },
 

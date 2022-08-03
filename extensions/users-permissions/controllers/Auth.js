@@ -9,13 +9,14 @@ const badRequest = (ctx, error) => {
 };
 
 const filteredUser = (user, github) => {
-  // console.log(user);
   return {
     id: user.id,
     avatar: github?.avatar_url,
     url: github?.html_url,
     name: github?.name ? github.name : github?.login,
     introduce: github?.bio || "",
+    followers: github?.followers,
+    following: github?.following,
   };
 };
 
